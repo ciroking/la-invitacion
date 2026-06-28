@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boda Gerson & Verónika</title>
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="¡Nos Casamos! Gerson & Verónika">
+    <meta property="og:description" content="Estás cordialmente invitado a nuestra boda el 06 de Agosto de 2026. Toca para abrir tu invitación interactiva.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&family=Cinzel&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --lila-pastel: #e9dcf0;
+            --lila-medio: #b39cd0;
+            --lila-fuerte: #845ec2;
+            --dorado: #b59e6d;
+            --blanco: #ffffff;
+            --texto: #4b4453;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f4f4;
+            color: var(--texto);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* --- 1. INTRO: SOBRE INTERACTIVO RESPONSIVO --- */
+        #sobre-intro {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fdfaf5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: transform 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .envelope-wrapper {
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            max-width: 360px;
+            padding: 20px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            height: 220px;
+            background: #e2d3ec;
+            margin: 0 auto;
+            border-radius: 4px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .solapa-superior {
+            position: absolute;
+            top: 0; left: 0;
+            width: 0; height: 0;
+            border-top: 120px solid #d1bfe0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            z-index: 4;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+        }
+
+        @media(max-width: 340px) {
+            .envelope { height: 190px; }
+            .solapa-superior { border-top-width: 100px; border-left-width: 140px; border-right-width: 140px; }
+        }
+
+        .envelope.open .solapa-superior {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .solapas-interiores {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(45deg, #ecdff5 50%, #dfd0ea 50%);
+            clip-path: polygon(0% 100%, 50% 45%, 100% 100%);
+            z-index: 2;
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 55px; height: 55px;
+            background: linear-gradient(135deg, var(--lila-fuerte), #6b3fa0);
+            border-radius: 50%;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.2rem;
+            box-shadow: 0 6px 15px rgba(132, 94, 194, 0.4);
+            animation: pulse 2s infinite;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.08); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* --- CONTROLES DE MÚSICA --- */
+        #music-control {
+            position: fixed;
+            top: 20px; right: 20px;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 50%;
+            width: 45px; height: 45px;
+            display: flex;
+            justify-content: center; align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid var(--lila-pastel);
+            visibility: hidden;
+        }
+
+        .disc-spinning { animation: spin 3s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- 2. MAQUETACIÓN RESPONSIVA --- */
+        .main-content {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            background-color: var(--blanco);
+            min-height: 100vh;
+            padding-bottom: 50px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.05);
+        }
+
+        .portada {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), 
+                        url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; align-items: center;
+            color: white; text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .portada h3 { font-size: 1.1rem; letter-spacing: 5px; font-weight: 200; }
+        .portada h1 { font-family: 'Great Vibes', cursive; font-size: 3.8rem; margin: 20px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .portada p { font-size: 1.2rem; letter-spacing: 3px; }
+
+        /* Estilo estético para el versículo al pie de la portada */
+        .portada .versiculo-portada {
+            font-size: 0.78rem;
+            font-weight: 300;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            max-width: 85%;
+            margin-top: 35px;
+            color: rgba(255, 255, 255, 0.85);
+            font-style: italic;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+        }
+
+        .seccion-carta { padding: 40px 20px; text-align: center; }
+        .marco-dorado { border: 2px solid var(--dorado); padding: 35px 15px; background: #fffcf8; }
+        .fuente-elegante { font-family: 'Great Vibes', cursive; font-size: 2.2rem; color: var(--dorado); margin: 15px 0; }
+        .nombres-padres { font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6; font-weight: 400; }
+
+        .evento-box {
+            margin: 25px 20px;
+            padding: 25px 15px;
+            background: var(--lila-pastel);
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .evento-box i { font-size: 2rem; color: var(--lila-fuerte); margin-bottom: 10px; }
+        .evento-box h4 { font-family: 'Cinzel', serif; margin-bottom: 8px; font-size: 1.15rem; }
+        .evento-box p { font-size: 0.9rem; margin-bottom: 4px; }
+
+        .btn-mapa {
+            display: inline-flex; align-items: center; gap: 8px;
+            margin-top: 12px; padding: 8px 20px;
+            background-color: var(--blanco);
+            border: 1px solid var(--lila-medio);
+            color: var(--lila-fuerte);
+            text-decoration: none; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-mapa:hover { background-color: var(--lila-fuerte); color: var(--blanco); }
+
+        .countdown-container {
+            background: linear-gradient(rgba(132, 94, 194, 0.65), rgba(0,0,0,0.65)), 
+                        url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1000');
+            background-size: cover; background-position: center;
+            padding: 50px 15px; color: white; text-align: center; margin-top: 40px;
+        }
+
+        .reloj { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 25px; }
+        .bloque-tiempo { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); padding: 12px 2px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); }
+        .bloque-tiempo span { font-size: 1.4rem; font-weight: bold; display: block; }
+        .bloque-tiempo p { font-size: 0.55rem; text-transform: uppercase; }
+
+        .btn-whatsapp {
+            display: inline-block; margin-top: 35px; padding: 15px 35px;
+            background-color: var(--lila-fuerte); color: white;
+            text-decoration: none; border-radius: 50px; font-weight: 600;
+            box-shadow: 0 4px 15px rgba(132, 94, 194, 0.4); width: 85%;
+        }
+
+        .scroll-down { position: absolute; bottom: 15px; animation: bounce 2s infinite; cursor: pointer; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+        #sobre-intro.hide { transform: translateY(-100%); pointer-events: none; visibility: hidden; }
+    </style>
+</head>
+<body>
+
+    <!-- Audio apuntando a tu archivo local de música subido -->
+    <audio id="miMusica" preload="auto" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-control" onclick="toggleMusica()">
+        <i id="music-icon" class="fas fa-music"></i>
+    </div>
+
+    <div id="sobre-intro" onclick="abrirInvitacion()">
+        <div class="envelope-wrapper">
+            <p style="margin-bottom: 25px; letter-spacing: 2px; font-weight: 300;">TIENES UNA INVITACIÓN</p>
+            <div class="envelope" id="envelope">
+                <div class="solapa-superior"></div>
+                <div class="solapas-interiores"></div>
+                <div class="heart-seal"><i class="fas fa-heart"></i></div>
+            </div>
+            <p style="margin-top: 35px; font-style: italic; color: var(--lila-medio); font-size: 0.9rem;">Toca el corazón para abrir</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <section class="portada">
+            <h3>NUESTRA BODA</h3>
+            <h1>Gerson & Verónika</h1>
+            <p>06 . AGOSTO . 2026</p>
+            
+            <!-- NUEVA SECCIÓN: Versículo Salmos 37:3-4 -->
+            <div class="versiculo-portada">
+                "Confía en Jehová, y haz el bien; y habitarás en la tierra, y te apacentarás de la verdad. Deléitate asimismo en Jehová, y él te concederá las peticiones de tu corazón."
+                <br><strong style="font-weight: 600; display: block; margin-top: 5px; font-size: 0.7rem; letter-spacing: 2px;">SALMOS 37:3-4</strong>
+            </div>
+
+            <div class="scroll-down"><i class="fas fa-chevron-down"></i></div>
+        </section>
+
+        <section class="seccion-carta">
+            <div class="marco-dorado">
+                <p style="font-style: italic; font-size: 0.85rem; color:#777;">Con la bendición de Dios y en compañía de nuestros padres</p>
+                
+                <h4 class="fuente-elegante">Padres del Novio</h4>
+                <p class="nombres-padres">Alejandro Cutire Huayllani<br>Modesta Zaravia Chullo</p>   
+                
+                <h4 class="fuente-elegante">Padres de la Novia</h4>
+                <p class="nombres-padres">Daniel Mamani Mamani<br>Alejandrina Llavilla Flores</p>
+
+                <hr style="width: 50%; margin: 0 auto; border: 0.5px solid var(--lila-pastel);">
+
+                <h4 class="fuente-elegante" style="color: var(--lila-fuerte);">Padrinos Mayores</h4>
+                <p class="nombres-padres">Daniel Morocco Calcina<br>Flor de María Guevara Pumasupa</p>
+
+                <h4 class="fuente-elegante" style="color: var(--lila-fuerte);">Padrinos Menores</h4>
+                <p class="nombres-padres">Elio Benigno Mamani Bustamante<br>Nely Pari Conde</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="evento-box">
+                <i class="fas fa-church"></i>
+                <h4>Ceremonia Religiosa</h4>
+                <p>10:00 HRS</p>
+                <p>Iglesia Evangélica Peruana Bet-el</p>
+                <a href="https://maps.google.com" target="_blank" class="btn-mapa">
+                    <i class="fas fa-map-marker-alt"></i> Cómo llegar
+                </a>
+            </div>
+
+            <div class="evento-box">
+                <i class="fas fa-pen-nib"></i>
+                <h4>Ceremonia Civil</h4>
+                <p>18:30 HRS</p>
+                <p>Palacio Municipal</p>
+                <a href="https://maps.google.com" target="_blank" class="btn-mapa">
+                    <i class="fas fa-map-marker-alt"></i> Cómo llegar
+                </a>
+            </div>
+
+            <div class="evento-box">
+                <i class="fas fa-glass-cheers"></i>
+                <h4>Casa de Recepción</h4>
+                <p>20:00 HRS</p>
+                <p>Salón de Eventos "La Quinta"</p>
+                <a href="https://maps.google.com" target="_blank" class="btn-mapa">
+                    <i class="fas fa-map-marker-alt"></i> Cómo llegar
+                </a>
+            </div>
+        </section>
+
+        <section class="countdown-container">
+            <h2 class="fuente-elegante" style="color: white; font-size: 2.8rem; margin-bottom: 10px;">Faltan solo...</h2>
+            <div class="reloj">
+                <div class="bloque-tiempo"><span id="days">00</span><p>Días</p></div>
+                <div class="bloque-tiempo"><span id="hours">00</span><p>Hrs</p></div>
+                <div class="bloque-tiempo"><span id="minutes">00</span><p>Min</p></div>
+                <div class="bloque-tiempo"><span id="seconds">00</span><p>Seg</p></div>
+            </div>
+
+            <a href="https://wa.me/51900000000?text=¡Hola! Confirmo mi asistencia a la boda de Veronika y Gerson" target="_blank" class="btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> CONFIRMAR ASISTENCIA
+            </a>
+        </section>
+
+        <footer style="text-align: center; padding: 40px 20px; font-size: 0.8rem; color: #aaa;">
+            <p>#VeronicaYGerson2026</p>
+        </footer>
+    </div>
+
+    <script>
+        const musica = document.getElementById('miMusica');
+        const musicControl = document.getElementById('music-control');
+        const musicIcon = document.getElementById('music-icon');
+
+        function abrirInvitacion() {
+            document.getElementById('envelope').classList.add('open');
+            musica.volume = 0.5;
+
+            musica.play().then(() => {
+                musicIcon.classList.add('disc-spinning');
+            }).catch(e => console.log("Música en espera de interacción."));
+
+            setTimeout(() => {
+                const sobre = document.getElementById('sobre-intro');
+                sobre.classList.add('hide');
+                musicControl.style.visibility = 'visible';
+            }, 800);
+        }
+
+        function toggleMusica() {
+            if (musica.paused) {
+                musica.play();
+                musicIcon.classList.add('disc-spinning');
+            } else {
+                musica.pause();
+                musicIcon.classList.remove('disc-spinning');
+            }
+        }
+
+        document.querySelector('.scroll-down')?.addEventListener('click', function(event) {
+            event.preventDefault();
+            document.querySelector('.seccion-carta')?.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        const fechaBoda = new Date('August 6, 2026 10:00:00').getTime();
+        setInterval(function() {
+            const diferencia = fechaBoda - new Date().getTime();
+            
+            let d = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            let h = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let m = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            let s = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            if (diferencia < 0) { d = 0; h = 0; m = 0; s = 0; }
+
+            document.getElementById('days').innerText = d < 10 ? '0'+d : d;
+            document.getElementById('hours').innerText = h < 10 ? '0'+h : h;
+            document.getElementById('minutes').innerText = m < 10 ? '0'+m : m;
+            document.getElementById('seconds').innerText = s < 10 ? '0'+s : s;
+        }, 1000);
+    </script>
+</body>
+</html>
